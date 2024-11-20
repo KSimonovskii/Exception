@@ -3,41 +3,33 @@ package telran.memory.utils;
 public class MemoryService {
     public static int getMaxAvailableMemory() {
         int size = Integer.MAX_VALUE;
-        int div = 2;
-        boolean success = false;
+        int maxSize = size;
+        int minSize = 0;
 
-        int prevSize = 0;
+        int div = 2;
+        int factor = 1;
         int j = 0;
-        int diff = size;
+
+        int[] arr = new int[0];
 
         while (true) {
-
             try {
-                int[] arr = new int[size];
-                success = true;
-                if (size < prevSize) {
-                    diff = (prevSize - size) / div;
-                }
+                arr = new int[size];
+                minSize = size;
+                factor = 1;
             } catch (Throwable e) {
-                success = false;
-                if (size > prevSize) {
-                    diff = (prevSize - size) / div;
-                }
+                maxSize = size;
+                factor = -1;
             } finally {
-
-                if (size == prevSize) {
-                    size = success? size: size - 1;
+                if (maxSize - minSize <= 1) {
                     break;
                 }
-
-                prevSize = size;
-                size += diff;
-
+                size = size + ((maxSize - minSize) / div * factor);
                 j++;
             }
         }
 
-        return size;
+        return arr.length;
     }
 
 
